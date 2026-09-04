@@ -1,14 +1,21 @@
 #!/bin/bash
 set -euo pipefail
 
-# Generates Mako-templated C files from Mesa source.
-# Requires: python3, mako (pip install mako)
-# Run from the repo root.
+# generates Mako-templated C files from Mesa source
+
+# requires: python3, mako (pip install mako)
+# Run from the repo root
 
 MESA_DIR="${MESA_DIR:-mesa}"
 OUT_DIR="${OUT_DIR:-mesa_generated}"
 
 PYTHON="${PYTHON:-python3}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+if [ -x "$REPO_ROOT/.venv/bin/python" ]; then
+  PYTHON="$REPO_ROOT/.venv/bin/python"
+fi
 
 NIR_DIR="$MESA_DIR/src/compiler/nir"
 SPIRV_DIR="$MESA_DIR/src/compiler/spirv"
@@ -28,13 +35,13 @@ PYTHONPATH="$NIR_DIR:$COMPILER_DIR:$SPIRV_DIR:$MS_DIR:$UTIL_DIR:$FORMAT_DIR:$MES
 
 echo "Generating NIR intrinsics..."
 PYTHONPATH="$NIR_DIR:$COMPILER_DIR:$SPIRV_DIR:$MS_DIR:$UTIL_DIR:$FORMAT_DIR:$MESA_DIR/src" \
-  "$PYTHON" "$NIR_DIR/nir_intrinsics_h.py" --outdir "$OUT_DIR"
+  "$PYTHON" "$NIR_DIR/nir_intrinsics_h.py" --out "$OUT_DIR/nir_intrinsics.h"
 
 PYTHONPATH="$NIR_DIR:$COMPILER_DIR:$SPIRV_DIR:$MS_DIR:$UTIL_DIR:$FORMAT_DIR:$MESA_DIR/src" \
-  "$PYTHON" "$NIR_DIR/nir_intrinsics_c.py" --outdir "$OUT_DIR"
+  "$PYTHON" "$NIR_DIR/nir_intrinsics_c.py" --out "$OUT_DIR/nir_intrinsics.c"
 
 PYTHONPATH="$NIR_DIR:$COMPILER_DIR:$SPIRV_DIR:$MS_DIR:$UTIL_DIR:$FORMAT_DIR:$MESA_DIR/src" \
-  "$PYTHON" "$NIR_DIR/nir_intrinsics_indices_h.py" --outdir "$OUT_DIR"
+  "$PYTHON" "$NIR_DIR/nir_intrinsics_indices_h.py" --out "$OUT_DIR/nir_intrinsics_indices.h"
 
 echo "Generating NIR builder opcodes..."
 PYTHONPATH="$NIR_DIR:$COMPILER_DIR:$SPIRV_DIR:$MS_DIR:$UTIL_DIR:$FORMAT_DIR:$MESA_DIR/src" \
