@@ -18,7 +18,6 @@ pub fn build(b: *std.Build) !void {
         .name = "u_qsort",
         .root_module = qsort_mod,
     });
-    b.installArtifact(qsort);
 
     // spirv_to_dxil (C11)
     const lib_mod = b.createModule(.{

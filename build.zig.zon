@@ -9,9 +9,5 @@
         "build.zig.zon",
         "mesa",
         "mesa_generated",
-        "scripts",
-        "inc",
-        "lib",
-        "bin",
     },
 }
