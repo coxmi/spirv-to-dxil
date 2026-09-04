@@ -1,24 +1,6 @@
 /*
  * Copyright (C) 2017 Intel Corporation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice (including the next
- * paragraph) shall be included in all copies or substantial portions of the
- * Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * SPDX-License-Identifier: MIT
  */
 
 /* DO NOT EDIT - This file is generated automatically by the
@@ -328,6 +310,13 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpColorAttachmentReadEXT: return (struct type_args){ 1, 0 };
    case SpvOpDepthAttachmentReadEXT: return (struct type_args){ 1, 0 };
    case SpvOpStencilAttachmentReadEXT: return (struct type_args){ 1, 0 };
+   case SpvOpTypeTensorARM: return (struct type_args){ 0, -1 };
+   case SpvOpTensorReadARM: return (struct type_args){ 1, 0 };
+   case SpvOpTensorQuerySizeARM: return (struct type_args){ 1, 0 };
+   case SpvOpGraphConstantARM: return (struct type_args){ 1, 0 };
+   case SpvOpGraphARM: return (struct type_args){ 1, 0 };
+   case SpvOpGraphInputARM: return (struct type_args){ 1, 0 };
+   case SpvOpTypeGraphARM: return (struct type_args){ 0, -1 };
    case SpvOpTypeUntypedPointerKHR: return (struct type_args){ 0, -1 };
    case SpvOpUntypedVariableKHR: return (struct type_args){ 1, 0 };
    case SpvOpUntypedAccessChainKHR: return (struct type_args){ 1, 0 };
@@ -337,12 +326,14 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpUntypedPtrAccessChainKHR: return (struct type_args){ 1, 0 };
    case SpvOpUntypedInBoundsPtrAccessChainKHR: return (struct type_args){ 1, 0 };
    case SpvOpUntypedArrayLengthKHR: return (struct type_args){ 1, 0 };
+   case SpvOpFmaKHR: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupAllKHR: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupAnyKHR: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupAllEqualKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupNonUniformRotateKHR: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupReadInvocationKHR: return (struct type_args){ 1, 0 };
    case SpvOpExtInstWithForwardRefsKHR: return (struct type_args){ 1, 0 };
+   case SpvOpUntypedGroupAsyncCopyKHR: return (struct type_args){ 1, 0 };
    case SpvOpConvertUToAccelerationStructureKHR: return (struct type_args){ 1, 0 };
    case SpvOpSDot: return (struct type_args){ 1, 0 };
    case SpvOpUDot: return (struct type_args){ 1, 0 };
@@ -364,10 +355,14 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpImageBoxFilterQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchSSDQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchSADQCOM: return (struct type_args){ 1, 0 };
+   case SpvOpBitCastArrayQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchWindowSSDQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchWindowSADQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchGatherSSDQCOM: return (struct type_args){ 1, 0 };
    case SpvOpImageBlockMatchGatherSADQCOM: return (struct type_args){ 1, 0 };
+   case SpvOpCompositeConstructCoopMatQCOM: return (struct type_args){ 1, 0 };
+   case SpvOpCompositeExtractCoopMatQCOM: return (struct type_args){ 1, 0 };
+   case SpvOpExtractSubArrayQCOM: return (struct type_args){ 1, 0 };
    case SpvOpGroupIAddNonUniformAMD: return (struct type_args){ 1, 0 };
    case SpvOpGroupFAddNonUniformAMD: return (struct type_args){ 1, 0 };
    case SpvOpGroupFMinNonUniformAMD: return (struct type_args){ 1, 0 };
@@ -379,9 +374,23 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpFragmentMaskFetchAMD: return (struct type_args){ 1, 0 };
    case SpvOpFragmentFetchAMD: return (struct type_args){ 1, 0 };
    case SpvOpReadClockKHR: return (struct type_args){ 1, 0 };
+   case SpvOpAllocateNodePayloadsAMDX: return (struct type_args){ 1, 0 };
+   case SpvOpTypeNodePayloadArrayAMDX: return (struct type_args){ 0, -1 };
    case SpvOpFinishWritingNodePayloadAMDX: return (struct type_args){ 1, 0 };
+   case SpvOpNodePayloadArrayLengthAMDX: return (struct type_args){ 1, 0 };
+   case SpvOpIsNodePayloadValidAMDX: return (struct type_args){ 1, 0 };
+   case SpvOpConstantStringAMDX: return (struct type_args){ 0, -1 };
+   case SpvOpSpecConstantStringAMDX: return (struct type_args){ 0, -1 };
    case SpvOpGroupNonUniformQuadAllKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupNonUniformQuadAnyKHR: return (struct type_args){ 1, 0 };
+   case SpvOpTypeBufferEXT: return (struct type_args){ 0, -1 };
+   case SpvOpBufferPointerEXT: return (struct type_args){ 1, 0 };
+   case SpvOpUntypedImageTexelPointerEXT: return (struct type_args){ 1, 0 };
+   case SpvOpConstantSizeOfEXT: return (struct type_args){ 1, 0 };
+   case SpvOpConstantDataKHR: return (struct type_args){ 1, 0 };
+   case SpvOpSpecConstantDataKHR: return (struct type_args){ 1, 0 };
+   case SpvOpPoisonKHR: return (struct type_args){ 1, 0 };
+   case SpvOpFreezeKHR: return (struct type_args){ 1, 0 };
    case SpvOpHitObjectGetWorldToObjectNV: return (struct type_args){ 1, 0 };
    case SpvOpHitObjectGetObjectToWorldNV: return (struct type_args){ 1, 0 };
    case SpvOpHitObjectGetObjectRayDirectionNV: return (struct type_args){ 1, 0 };
@@ -403,17 +412,62 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpHitObjectIsMissNV: return (struct type_args){ 1, 0 };
    case SpvOpTypeHitObjectNV: return (struct type_args){ 0, -1 };
    case SpvOpImageSampleFootprintNV: return (struct type_args){ 1, 0 };
-   case SpvOpGroupNonUniformPartitionNV: return (struct type_args){ 1, 0 };
+   case SpvOpTypeVectorIdEXT: return (struct type_args){ 0, -1 };
+   case SpvOpCooperativeVectorMatrixMulNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeVectorMatrixMulAddNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeMatrixConvertNV: return (struct type_args){ 1, 0 };
+   case SpvOpGroupNonUniformPartitionEXT: return (struct type_args){ 1, 0 };
    case SpvOpFetchMicroTriangleVertexPositionNV: return (struct type_args){ 1, 0 };
    case SpvOpFetchMicroTriangleVertexBarycentricNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeVectorLoadNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetIntersectionTriangleVertexPositionsEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetRayFlagsEXT: return (struct type_args){ 1, 0 };
+   case SpvOpTypeHitObjectEXT: return (struct type_args){ 0, -1 };
+   case SpvOpHitObjectGetCurrentTimeEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetHitKindEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetPrimitiveIndexEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetGeometryIndexEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetInstanceIdEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetInstanceCustomIndexEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetObjectRayOriginEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetObjectRayDirectionEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetWorldRayDirectionEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetWorldRayOriginEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetObjectToWorldEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetWorldToObjectEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetRayTMaxEXT: return (struct type_args){ 1, 0 };
    case SpvOpReportIntersectionKHR: return (struct type_args){ 1, 0 };
    case SpvOpRayQueryGetIntersectionTriangleVertexPositionsKHR: return (struct type_args){ 1, 0 };
    case SpvOpTypeAccelerationStructureKHR: return (struct type_args){ 0, -1 };
+   case SpvOpRayQueryGetIntersectionClusterIdNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetClusterIdNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetRayTMinEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetShaderBindingTableRecordIndexEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetShaderRecordBufferHandleEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectIsEmptyEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectIsHitEXT: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectIsMissEXT: return (struct type_args){ 1, 0 };
    case SpvOpTypeCooperativeMatrixNV: return (struct type_args){ 0, -1 };
    case SpvOpCooperativeMatrixLoadNV: return (struct type_args){ 1, 0 };
    case SpvOpCooperativeMatrixMulAddNV: return (struct type_args){ 1, 0 };
    case SpvOpCooperativeMatrixLengthNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeMatrixReduceNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeMatrixLoadTensorNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeMatrixPerElementOpNV: return (struct type_args){ 1, 0 };
+   case SpvOpTypeTensorLayoutNV: return (struct type_args){ 0, -1 };
+   case SpvOpTypeTensorViewNV: return (struct type_args){ 0, -1 };
+   case SpvOpCreateTensorLayoutNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorLayoutSetDimensionNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorLayoutSetStrideNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorLayoutSliceNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorLayoutSetClampValueNV: return (struct type_args){ 1, 0 };
+   case SpvOpCreateTensorViewNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorViewSetDimensionNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorViewSetStrideNV: return (struct type_args){ 1, 0 };
    case SpvOpIsHelperInvocationEXT: return (struct type_args){ 1, 0 };
+   case SpvOpTensorViewSetClipNV: return (struct type_args){ 1, 0 };
+   case SpvOpTensorLayoutSetBlockSizeNV: return (struct type_args){ 1, 0 };
+   case SpvOpCooperativeMatrixTransposeNV: return (struct type_args){ 1, 0 };
    case SpvOpConvertUToImageNV: return (struct type_args){ 1, 0 };
    case SpvOpConvertUToSamplerNV: return (struct type_args){ 1, 0 };
    case SpvOpConvertImageToUNV: return (struct type_args){ 1, 0 };
@@ -421,6 +475,19 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpConvertUToSampledImageNV: return (struct type_args){ 1, 0 };
    case SpvOpConvertSampledImageToUNV: return (struct type_args){ 1, 0 };
    case SpvOpRawAccessChainNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryGetIntersectionSpherePositionNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryGetIntersectionSphereRadiusNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryGetIntersectionLSSPositionsNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryGetIntersectionLSSRadiiNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryGetIntersectionLSSHitValueNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetSpherePositionNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetSphereRadiusNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetLSSPositionsNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectGetLSSRadiiNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectIsSphereHitNV: return (struct type_args){ 1, 0 };
+   case SpvOpHitObjectIsLSSHitNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryIsSphereHitNV: return (struct type_args){ 1, 0 };
+   case SpvOpRayQueryIsLSSHitNV: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupShuffleINTEL: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupShuffleDownINTEL: return (struct type_args){ 1, 0 };
    case SpvOpSubgroupShuffleUpINTEL: return (struct type_args){ 1, 0 };
@@ -444,7 +511,7 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpUMul32x16INTEL: return (struct type_args){ 1, 0 };
    case SpvOpConstantFunctionPointerINTEL: return (struct type_args){ 1, 0 };
    case SpvOpFunctionPointerCallINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpAsmTargetINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpAsmTargetINTEL: return (struct type_args){ 0, -1 };
    case SpvOpAsmINTEL: return (struct type_args){ 1, 0 };
    case SpvOpAsmCallINTEL: return (struct type_args){ 1, 0 };
    case SpvOpAtomicFMinEXT: return (struct type_args){ 1, 0 };
@@ -570,24 +637,24 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpSubgroupAvcSicGetInterRawSadsINTEL: return (struct type_args){ 1, 0 };
    case SpvOpVariableLengthArrayINTEL: return (struct type_args){ 1, 0 };
    case SpvOpSaveMemoryINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatSinCosPiINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatCastINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatCastFromIntINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatCastToIntINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatAddINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatSubINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatMulINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatDivINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatGTINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatGEINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatLTINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatLEINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatEQINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatRecipINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatRSqrtINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatCbrtINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatHypotINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpArbitraryFloatSqrtINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatSinCosPiALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatCastALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatCastFromIntALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatCastToIntALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatAddALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatSubALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatMulALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatDivALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatGTALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatGEALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatLTALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatLEALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatEQALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatRecipALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatRSqrtALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatCbrtALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatHypotALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpArbitraryFloatSqrtALTERA: return (struct type_args){ 1, 0 };
    case SpvOpArbitraryFloatLogINTEL: return (struct type_args){ 1, 0 };
    case SpvOpArbitraryFloatLog2INTEL: return (struct type_args){ 1, 0 };
    case SpvOpArbitraryFloatLog10INTEL: return (struct type_args){ 1, 0 };
@@ -614,22 +681,20 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpAliasDomainDeclINTEL: return (struct type_args){ 0, -1 };
    case SpvOpAliasScopeDeclINTEL: return (struct type_args){ 0, -1 };
    case SpvOpAliasScopeListDeclINTEL: return (struct type_args){ 0, -1 };
-   case SpvOpFixedSqrtINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedRecipINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedRsqrtINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedSinINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedCosINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedSinCosINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedSinPiINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedCosPiINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedSinCosPiINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedLogINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFixedExpINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpPtrCastToCrossWorkgroupINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpCrossWorkgroupCastToPtrINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpReadPipeBlockingINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpWritePipeBlockingINTEL: return (struct type_args){ 1, 0 };
-   case SpvOpFPGARegINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpFixedSqrtALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedRecipALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedRsqrtALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedSinALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedCosALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedSinCosALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedSinPiALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedCosPiALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedSinCosPiALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedLogALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFixedExpALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpPtrCastToCrossWorkgroupALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpCrossWorkgroupCastToPtrALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpFPGARegALTERA: return (struct type_args){ 1, 0 };
    case SpvOpRayQueryGetRayTMinKHR: return (struct type_args){ 1, 0 };
    case SpvOpRayQueryGetRayFlagsKHR: return (struct type_args){ 1, 0 };
    case SpvOpRayQueryGetIntersectionTKHR: return (struct type_args){ 1, 0 };
@@ -649,10 +714,20 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpRayQueryGetIntersectionWorldToObjectKHR: return (struct type_args){ 1, 0 };
    case SpvOpAtomicFAddEXT: return (struct type_args){ 1, 0 };
    case SpvOpTypeBufferSurfaceINTEL: return (struct type_args){ 0, -1 };
-   case SpvOpCompositeConstructContinuedINTEL: return (struct type_args){ 1, 0 };
    case SpvOpConvertFToBF16INTEL: return (struct type_args){ 1, 0 };
    case SpvOpConvertBF16ToFINTEL: return (struct type_args){ 1, 0 };
    case SpvOpArithmeticFenceEXT: return (struct type_args){ 1, 0 };
+   case SpvOpTaskSequenceCreateALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpTaskSequenceGetALTERA: return (struct type_args){ 1, 0 };
+   case SpvOpTypeTaskSequenceALTERA: return (struct type_args){ 0, -1 };
+   case SpvOpSubgroupMatrixMultiplyAccumulateINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpBitwiseFunctionINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpUntypedVariableLengthArrayINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpSpecConstantTargetINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpSpecConstantArchitectureINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpSpecConstantCapabilitiesINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpConditionalCopyObjectINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpPredicatedLoadINTEL: return (struct type_args){ 1, 0 };
    case SpvOpGroupIMulKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupFMulKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupBitwiseAndKHR: return (struct type_args){ 1, 0 };
@@ -661,7 +736,14 @@ result_type_args_for_opcode(SpvOp opcode)
    case SpvOpGroupLogicalAndKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupLogicalOrKHR: return (struct type_args){ 1, 0 };
    case SpvOpGroupLogicalXorKHR: return (struct type_args){ 1, 0 };
+   case SpvOpRoundFToTF32INTEL: return (struct type_args){ 1, 0 };
    case SpvOpMaskedGatherINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpConvertHandleToImageINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpConvertHandleToSamplerINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpConvertHandleToSampledImageINTEL: return (struct type_args){ 1, 0 };
+   case SpvOpFDot2MixAcc32VALVE: return (struct type_args){ 1, 0 };
+   case SpvOpFDot2MixAcc16VALVE: return (struct type_args){ 1, 0 };
+   case SpvOpFDot4MixAcc32VALVE: return (struct type_args){ 1, 0 };
    default: return (struct type_args){ -1, -1 };
    }
 }

@@ -2,25 +2,7 @@
 
 /*
  * Copyright (C) 2017 Intel Corporation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice (including the next
- * paragraph) shall be included in all copies or substantial portions of the
- * Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * SPDX-License-Identifier: MIT
  */
 
 #ifndef _SPIRV_INFO_H_
@@ -105,7 +87,13 @@ struct spirv_capabilities {
    bool TileImageColorReadAccessEXT;
    bool TileImageDepthReadAccessEXT;
    bool TileImageStencilReadAccessEXT;
+   bool TensorsARM;
+   bool StorageTensorArrayDynamicIndexingARM;
+   bool StorageTensorArrayNonUniformIndexingARM;
+   bool GraphARM;
    bool CooperativeMatrixLayoutsARM;
+   bool Float8EXT;
+   bool Float8CooperativeMatrixEXT;
    bool FragmentShadingRateKHR;
    bool SubgroupBallotKHR;
    bool DrawParameters;
@@ -145,6 +133,8 @@ struct spirv_capabilities {
    bool TextureSampleWeightedQCOM;
    bool TextureBoxFilterQCOM;
    bool TextureBlockMatchQCOM;
+   bool TileShadingQCOM;
+   bool CooperativeMatrixConversionQCOM;
    bool TextureBlockMatch2QCOM;
    bool Float16ImageAMD;
    bool ImageGatherBiasLodAMD;
@@ -155,6 +145,16 @@ struct spirv_capabilities {
    bool ShaderClockKHR;
    bool ShaderEnqueueAMDX;
    bool QuadControlKHR;
+   bool Int4TypeINTEL;
+   bool Int4CooperativeMatrixINTEL;
+   bool BFloat16TypeKHR;
+   bool BFloat16DotProductKHR;
+   bool BFloat16CooperativeMatrixKHR;
+   bool AbortKHR;
+   bool DescriptorHeapEXT;
+   bool ConstantDataKHR;
+   bool PoisonFreezeKHR;
+   bool WeakLinkageAMD;
    bool SampleMaskOverrideCoverageNV;
    bool GeometryShaderPassthroughNV;
    union {
@@ -180,7 +180,10 @@ struct spirv_capabilities {
       bool FragmentDensityEXT;
       bool ShadingRateNV;
    };
-   bool GroupNonUniformPartitionedNV;
+   union {
+      bool GroupNonUniformPartitionedEXT;
+      bool GroupNonUniformPartitionedNV;
+   };
    union {
       bool ShaderNonUniform;
       bool ShaderNonUniformEXT;
@@ -259,13 +262,32 @@ struct spirv_capabilities {
       bool DemoteToHelperInvocationEXT;
    };
    bool DisplacementMicromapNV;
-   bool RayTracingOpacityMicromapEXT;
+   union {
+      bool RayTracingOpacityMicromapKHR;
+      bool RayTracingOpacityMicromapEXT;
+   };
    bool ShaderInvocationReorderNV;
+   bool ShaderInvocationReorderEXT;
    bool BindlessTextureNV;
    bool RayQueryPositionFetchKHR;
+   bool CooperativeVectorNV;
    bool AtomicFloat16VectorNV;
    bool RayTracingDisplacementMicromapNV;
    bool RawAccessChainsNV;
+   bool RayTracingSpheresGeometryNV;
+   bool RayTracingLinearSweptSpheresGeometryNV;
+   bool PushConstantBanksNV;
+   bool LongVectorEXT;
+   bool Shader64BitIndexingEXT;
+   bool CooperativeMatrixReductionsNV;
+   bool CooperativeMatrixConversionsNV;
+   bool CooperativeMatrixPerElementOperationsNV;
+   bool CooperativeMatrixTensorAddressingNV;
+   bool CooperativeMatrixBlockLoadsNV;
+   bool CooperativeVectorTrainingNV;
+   bool RayTracingClusterAccelerationStructureNV;
+   bool TensorAddressingNV;
+   bool CooperativeMatrixDecodeVectorNV;
    bool SubgroupShuffleINTEL;
    bool SubgroupBufferBlockIOINTEL;
    bool SubgroupImageBlockIOINTEL;
@@ -287,27 +309,75 @@ struct spirv_capabilities {
    bool SubgroupAvcMotionEstimationChromaINTEL;
    bool VariableLengthArrayINTEL;
    bool FunctionFloatControlINTEL;
-   bool FPGAMemoryAttributesINTEL;
+   union {
+      bool FPGAMemoryAttributesALTERA;
+      bool FPGAMemoryAttributesINTEL;
+   };
    bool FPFastMathModeINTEL;
-   bool ArbitraryPrecisionIntegersINTEL;
-   bool ArbitraryPrecisionFloatingPointINTEL;
+   union {
+      bool ArbitraryPrecisionIntegersALTERA;
+      bool ArbitraryPrecisionIntegersINTEL;
+   };
+   union {
+      bool ArbitraryPrecisionFloatingPointALTERA;
+      bool ArbitraryPrecisionFloatingPointINTEL;
+   };
    bool UnstructuredLoopControlsINTEL;
-   bool FPGALoopControlsINTEL;
+   union {
+      bool FPGALoopControlsALTERA;
+      bool FPGALoopControlsINTEL;
+   };
    bool KernelAttributesINTEL;
    bool FPGAKernelAttributesINTEL;
-   bool FPGAMemoryAccessesINTEL;
-   bool FPGAClusterAttributesINTEL;
-   bool LoopFuseINTEL;
-   bool FPGADSPControlINTEL;
+   union {
+      bool FPGAMemoryAccessesALTERA;
+      bool FPGAMemoryAccessesINTEL;
+   };
+   union {
+      bool FPGAClusterAttributesALTERA;
+      bool FPGAClusterAttributesINTEL;
+   };
+   union {
+      bool LoopFuseALTERA;
+      bool LoopFuseINTEL;
+   };
+   union {
+      bool FPGADSPControlALTERA;
+      bool FPGADSPControlINTEL;
+   };
    bool MemoryAccessAliasingINTEL;
-   bool FPGAInvocationPipeliningAttributesINTEL;
-   bool FPGABufferLocationINTEL;
-   bool ArbitraryPrecisionFixedPointINTEL;
-   bool USMStorageClassesINTEL;
-   bool RuntimeAlignedAttributeINTEL;
-   bool IOPipesINTEL;
-   bool BlockingPipesINTEL;
-   bool FPGARegINTEL;
+   union {
+      bool FPGAInvocationPipeliningAttributesALTERA;
+      bool FPGAInvocationPipeliningAttributesINTEL;
+   };
+   union {
+      bool FPGABufferLocationALTERA;
+      bool FPGABufferLocationINTEL;
+   };
+   union {
+      bool ArbitraryPrecisionFixedPointALTERA;
+      bool ArbitraryPrecisionFixedPointINTEL;
+   };
+   union {
+      bool USMStorageClassesALTERA;
+      bool USMStorageClassesINTEL;
+   };
+   union {
+      bool RuntimeAlignedAttributeALTERA;
+      bool RuntimeAlignedAttributeINTEL;
+   };
+   union {
+      bool IOPipesALTERA;
+      bool IOPipesINTEL;
+   };
+   union {
+      bool BlockingPipesALTERA;
+      bool BlockingPipesINTEL;
+   };
+   union {
+      bool FPGARegALTERA;
+      bool FPGARegINTEL;
+   };
    union {
       bool DotProductInputAll;
       bool DotProductInputAllKHR;
@@ -330,6 +400,8 @@ struct spirv_capabilities {
    bool BitInstructions;
    bool GroupNonUniformRotateKHR;
    bool FloatControls2;
+   bool FMAKHR;
+   bool RayTracingOpacityMicromapExecutionModeKHR;
    bool AtomicFloat32AddEXT;
    bool AtomicFloat64AddEXT;
    bool LongCompositesINTEL;
@@ -340,20 +412,55 @@ struct spirv_capabilities {
    bool AtomicFloat16AddEXT;
    bool DebugInfoModuleINTEL;
    bool BFloat16ConversionINTEL;
-   bool SplitBarrierINTEL;
+   union {
+      bool SplitBarrierEXT;
+      bool SplitBarrierINTEL;
+   };
    bool ArithmeticFenceEXT;
-   bool FPGAClusterAttributesV2INTEL;
+   union {
+      bool FPGAClusterAttributesV2ALTERA;
+      bool FPGAClusterAttributesV2INTEL;
+   };
    bool FPGAKernelAttributesv2INTEL;
+   union {
+      bool TaskSequenceALTERA;
+      bool TaskSequenceINTEL;
+   };
    bool FPMaxErrorINTEL;
-   bool FPGALatencyControlINTEL;
-   bool FPGAArgumentInterfacesINTEL;
+   union {
+      bool FPGALatencyControlALTERA;
+      bool FPGALatencyControlINTEL;
+   };
+   union {
+      bool FPGAArgumentInterfacesALTERA;
+      bool FPGAArgumentInterfacesINTEL;
+   };
    bool GlobalVariableHostAccessINTEL;
-   bool GlobalVariableFPGADecorationsINTEL;
+   union {
+      bool GlobalVariableFPGADecorationsALTERA;
+      bool GlobalVariableFPGADecorationsINTEL;
+   };
    bool SubgroupBufferPrefetchINTEL;
+   bool Subgroup2DBlockIOINTEL;
+   bool Subgroup2DBlockTransformINTEL;
+   bool Subgroup2DBlockTransposeINTEL;
+   bool SubgroupMatrixMultiplyAccumulateINTEL;
+   bool TernaryBitwiseFunctionINTEL;
+   bool UntypedVariableLengthArrayINTEL;
+   bool SpecConditionalINTEL;
+   bool FunctionVariantsINTEL;
+   bool PredicatedIOINTEL;
+   bool RoundedDivideSqrtINTEL;
    bool GroupUniformArithmeticKHR;
+   bool TensorFloat32RoundingINTEL;
    bool MaskedGatherScatterINTEL;
    bool CacheControlsINTEL;
    bool RegisterLimitsINTEL;
+   bool BindlessImagesINTEL;
+   bool DotProductFloat16AccFloat32VALVE;
+   bool DotProductFloat16AccFloat16VALVE;
+   bool DotProductBFloat16AccVALVE;
+   bool DotProductFloat8AccFloat32VALVE;
 };
 
 bool spirv_capabilities_get(const struct spirv_capabilities *caps,
