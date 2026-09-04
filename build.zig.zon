@@ -1,0 +1,17 @@
+.{
+    .name = .dxc_bin,
+    .version = "0.0.0",
+    .fingerprint = 0x1d7ea9b2c5b9dc04,
+    .minimum_zig_version = "0.17.0-dev.1963+e00c6c439",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "mesa",
+        "mesa_generated",
+        "scripts",
+        "inc",
+        "lib",
+        "bin",
+    },
+}
