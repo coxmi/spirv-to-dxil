@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# clones mesa (only the directories needed for compilation/code-gen)
+# copies files into the mesa/
+#
+# Usage:
+# latest release tag
+# ./scripts/vendor-mesa.sh
+# # specific tag
+# ./scripts/vendor-mesa.sh mesa-24.3.4
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_MESA="$REPO_ROOT/mesa"
+
+MESA_TAG="${1:-}"
+MESA_URL="https://gitlab.freedesktop.org/mesa/mesa.git"
+
+# directories needed for compilation (from build.zig include paths)
+COMPILE_DIRS=(
+    include
+    src/c11
+    src/compiler
+    src/microsoft
+    src/util
+)
+
+# additional files needed for code generation (Mako scripts, grammar, etc.)
+EXTRA_FILES=(
+    VERSION
+    meson.build
+)
+
+# resolve which tag to use
+if [ -z "$MESA_TAG" ]; then
+    echo "finding latest Mesa release tag..."
+    MESA_TAG=$(git ls-remote --tags --refs --sort=-v:refname "$MESA_URL" \
+        | grep -o 'refs/tags/mesa-[0-9]*\.[0-9]*\.[0-9]*$' \
+        | head -1 \
+        | sed 's|refs/tags/||')
+    echo "latest release: $MESA_TAG"
+fi
+
+# clone to a temp directory
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$TMPDIR"' EXIT
+
+echo "cloning Mesa $MESA_TAG (shallow, sparse)..."
+git init "$TMPDIR/mesa-src"
+git -C "$TMPDIR/mesa-src" remote add origin "$MESA_URL"
+git -C "$TMPDIR/mesa-src" fetch --depth 1 --filter=blob:none origin tag "$MESA_TAG" 2>&1
+git -C "$TMPDIR/mesa-src" checkout --detach FETCH_HEAD
+
+cd "$TMPDIR/mesa-src"
+git sparse-checkout init --cone
+git sparse-checkout set "${COMPILE_DIRS[@]}"
+cd - > /dev/null
+
+# copy into repo, overwriting existing
+echo "vendoring into $REPO_MESA/..."
+mkdir -p "$REPO_MESA"
+
+for dir in "${COMPILE_DIRS[@]}"; do
+    mkdir -p "$REPO_MESA/$(dirname "$dir")"
+    rm -rf "$REPO_MESA/$dir"
+    cp -a "$TMPDIR/mesa-src/$dir" "$REPO_MESA/$dir"
+done
+
+for file in "${EXTRA_FILES[@]}"; do
+    cp -a "$TMPDIR/mesa-src/$file" "$REPO_MESA/$file"
+done
+
+# prune symlinks whose targets are outside the sparse vendored set
+find "$REPO_MESA" -type l ! -exec test -e {} \; -print0 | xargs -0 rm
+
+# store the tag for reference
+echo "$MESA_TAG" > "$REPO_MESA/.vendored-version"
+
+echo "done. vendored Mesa $MESA_TAG into $REPO_MESA/"
+echo "files: $(find "$REPO_MESA" -type f | wc -l | tr -d ' ')"
+echo "size: $(du -sh "$REPO_MESA" | cut -f1)"
