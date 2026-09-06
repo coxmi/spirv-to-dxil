@@ -29,10 +29,8 @@ EXTRA_FILES=(
 # resolve which tag to use
 if [ -z "$MESA_TAG" ]; then
     echo "finding latest mesa release tag..."
-    MESA_TAG=$(git ls-remote --tags --refs --sort=-v:refname "$MESA_URL" \
-        | grep -o 'refs/tags/mesa-[0-9]*\.[0-9]*\.[0-9]*$' \
-        | head -1 \
-        | sed 's|refs/tags/||')
+    MESA_TAGS="$(git ls-remote --tags --refs --sort=-v:refname "$MESA_URL")"
+    MESA_TAG="$(grep -m1 -oE 'mesa-[0-9]+\.[0-9]+\.[0-9]+$' <<<"$MESA_TAGS")"
     echo "latest release: $MESA_TAG"
 fi
 

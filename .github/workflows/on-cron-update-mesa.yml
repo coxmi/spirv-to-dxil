@@ -1,0 +1,73 @@
+name: update-mesa
+
+on:
+  schedule:
+    - cron: "0 10 1 * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install mako
+        run: pip install mako pyyaml
+
+      - name: vendor latest mesa release
+        run: ./mesa-vendor
+
+      - name: get mesa version
+        id: version
+        run: echo "tag=$(cat mesa/.vendored-version)" >> "$GITHUB_OUTPUT"
+
+      - name: generate files
+        run: ./mesa-generate
+
+      - name: check for changes
+        id: diff
+        run: |
+          if git diff --quiet mesa/ mesa_generated/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: mlugg/setup-zig@v2
+        if: steps.diff.outputs.changed == 'true'
+
+      - name: build
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          zig build -Doptimize=Debug -Dtarget=x86_64-macos
+          zig build -Doptimize=Debug -Dtarget=aarch64-macos
+          zig build -Doptimize=Debug -Dtarget=x86_64-linux-gnu
+          zig build -Doptimize=Debug -Dtarget=aarch64-linux-gnu
+          zig build -Doptimize=Debug -Dtarget=x86_64-windows-gnu
+          zig build -Doptimize=Debug -Dtarget=aarch64-windows-gnu
+
+      - name: create PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="chore/update-mesa-${{ steps.version.outputs.tag }}"
+          BODY=$'automated mesa update to \`${{ steps.version.outputs.tag }}\`'
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add mesa/ mesa_generated/
+          git commit -m "chore: update mesa to ${{ steps.version.outputs.tag }}"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "Update mesa to ${{ steps.version.outputs.tag }}" \
+            --body "$BODY" \
+            --label "dependencies"
