@@ -5,14 +5,19 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    uses: ./.github/workflows/lib-build-release.yml
-    with:
-      mode: ReleaseFast
-      publish: false
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v2
+
+      - name: build and run tests
+        run: zig build test
 
   tag:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write

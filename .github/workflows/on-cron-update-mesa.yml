@@ -44,15 +44,9 @@ jobs:
       - uses: mlugg/setup-zig@v2
         if: steps.diff.outputs.changed == 'true'
 
-      - name: build
+      - name: build and run tests
         if: steps.diff.outputs.changed == 'true'
-        run: |
-          zig build -Doptimize=Debug -Dtarget=x86_64-macos
-          zig build -Doptimize=Debug -Dtarget=aarch64-macos
-          zig build -Doptimize=Debug -Dtarget=x86_64-linux-gnu
-          zig build -Doptimize=Debug -Dtarget=aarch64-linux-gnu
-          zig build -Doptimize=Debug -Dtarget=x86_64-windows-gnu
-          zig build -Doptimize=Debug -Dtarget=aarch64-windows-gnu
+        run: zig build -Doptimize=Debug test
 
       - name: create PR
         if: steps.diff.outputs.changed == 'true'

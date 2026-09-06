@@ -9,5 +9,7 @@
         "build.zig.zon",
         "mesa",
         "mesa_generated",
+        "mesa_stubs",
+        "src",
     },
 }

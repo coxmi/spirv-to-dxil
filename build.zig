@@ -61,6 +61,11 @@ pub fn build(b: *std.Build) !void {
         .{ "M_2_SQRTPI", "1.12837916709551257390" },
         .{ "M_SQRT2", "1.41421356237309504880" },
         .{ "M_SQRT1_2", "0.707106781186547524401" },
+        .{ "BLAKE3_NO_AVX512", null },
+        .{ "BLAKE3_NO_AVX2", null },
+        .{ "BLAKE3_NO_SSE41", null },
+        .{ "BLAKE3_NO_SSE2", null },
+        .{ "BLAKE3_USE_NEON", "0" },
     };
     for (defines) |d| {
         lib_mod.addCMacro(d[0], d[1] orelse "");
@@ -69,13 +74,11 @@ pub fn build(b: *std.Build) !void {
     const os_tag = target.result.os.tag;
     if (os_tag == .windows) {
         lib_mod.addCMacro("WINDOWS_NO_FUTEX", "");
-    } else if (os_tag == .linux) {
-        lib_mod.addCMacro("HAVE_PTHREAD", "");
-        lib_mod.addCMacro("_GNU_SOURCE", "");
-        lib_mod.addCMacro("HAVE_THRD_CREATE", "");
     } else {
         lib_mod.addCMacro("HAVE_PTHREAD", "");
+        lib_mod.addCMacro("HAVE_SYSCONF", "1");
         lib_mod.addCMacro("_GNU_SOURCE", "");
+        if (os_tag == .linux) lib_mod.addCMacro("HAVE_THRD_CREATE", "");
     }
 
     if (target.result.cpu.arch.endian() == .big) {
@@ -132,6 +135,23 @@ pub fn build(b: *std.Build) !void {
     lib.installHeader(b.path("mesa/src/microsoft/spirv_to_dxil/spirv_to_dxil.h"), "spirv_to_dxil.h");
     lib.installHeader(b.path("mesa/src/microsoft/compiler/dxil_versions.h"), "dxil_versions.h");
     b.installArtifact(lib);
+
+    // same module doubles as public api (dep.module) and as test root
+    const bindings = b.addModule("spirv_to_dxil", .{
+        .root_source_file = b.path("src/spirv_to_dxil.zig"),
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+    });
+
+    // linking it catches undefined symbols per matrix target, running it tests the api
+    const bindings_test = b.addTest(.{ .root_module = bindings });
+    bindings_test.root_module.linkLibrary(lib);
+    b.getInstallStep().dependOn(&bindings_test.step);
+    const run_bindings_test = b.addRunArtifact(bindings_test);
+    run_bindings_test.setCwd(b.path("."));
+    const test_step = b.step("test", "run bindings tests (version + spv to dxil)");
+    test_step.dependOn(&run_bindings_test.step);
 }
 
 fn mesaVersion(b: *std.Build) []const u8 {
@@ -153,6 +173,8 @@ const c_util = [_][]const u8{
     "mesa/src/util/u_worklist.c",
     "mesa/src/util/u_vector.c",
     "mesa/src/util/u_debug.c",
+    "mesa/src/util/u_cpu_detect.c",
+    "mesa/src/util/u_thread.c",
     "mesa/src/util/u_dynarray.c",
     "mesa/src/util/u_printf.c",
     "mesa/src/util/u_call_once.c",
@@ -166,9 +188,18 @@ const c_util = [_][]const u8{
     "mesa/src/util/rb_tree.c",
     "mesa/src/util/string_buffer.c",
     "mesa/src/util/half_float.c",
+    "mesa/src/util/float8.c",
     "mesa/src/util/softfloat.c",
     "mesa/src/util/double.c",
     "mesa/src/util/fast_idiv_by_const.c",
+    "mesa/src/util/range_minimum_query.c",
+    "mesa/src/util/u_process.c",
+    "mesa/src/util/os_misc.c",
+    "mesa/src/util/os_file.c",
+    "mesa/src/util/mesa-blake3.c",
+    "mesa/src/util/blake3/blake3.c",
+    "mesa/src/util/blake3/blake3_dispatch.c",
+    "mesa/src/util/blake3/blake3_portable.c",
 };
 
 const c_compiler = [_][]const u8{
@@ -182,6 +213,7 @@ const c_spirv = [_][]const u8{
     "mesa/src/compiler/spirv/vtn_amd.c",
     "mesa/src/compiler/spirv/vtn_cfg.c",
     "mesa/src/compiler/spirv/vtn_cmat.c",
+    "mesa/src/compiler/spirv/vtn_debug.c",
     "mesa/src/compiler/spirv/vtn_glsl450.c",
     "mesa/src/compiler/spirv/vtn_opencl.c",
     "mesa/src/compiler/spirv/vtn_structured_cfg.c",
