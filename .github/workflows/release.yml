@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - aarch64-macos
+          - x86_64-macos
+          - x86_64-linux-gnu
+          - aarch64-linux-gnu
+          - x86_64-windows-gnu
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: 0.17.0
+
+      - name: build
+        run: zig build -Dtarget=${{ matrix.target }} -Doptimize=ReleaseFast
+
+      - name: package
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          NAME="spirv_to_dxil-${TAG#v}-${{ matrix.target }}"
+          mkdir -p "${NAME}/lib" "${NAME}/include"
+          cp zig-out/lib/* "${NAME}/lib/"
+          cp zig-out/include/*.h "${NAME}/include/"
+          tar czf "${NAME}.tar.gz" "${NAME}/"
+          echo "ASSET=${NAME}.tar.gz" >> "$GITHUB_ENV"
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spirv_to_dxil-${{ matrix.target }}
+          path: spirv_to_dxil-*.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --generate-notes \
+            artifacts/*.tar.gz
