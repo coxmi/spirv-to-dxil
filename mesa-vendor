@@ -2,16 +2,10 @@
 set -euo pipefail
 
 # clones mesa (only the directories needed for compilation/code-gen)
-# copies files into the mesa/
-#
-# Usage:
-# latest release tag
-# ./scripts/vendor-mesa.sh
-# # specific tag
-# ./scripts/vendor-mesa.sh mesa-24.3.4
+# copies files into mesa/
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_ROOT="$SCRIPT_DIR"
 REPO_MESA="$REPO_ROOT/mesa"
 
 MESA_TAG="${1:-}"
@@ -26,7 +20,7 @@ COMPILE_DIRS=(
     src/util
 )
 
-# additional files needed for code generation (Mako scripts, grammar, etc.)
+# additional files needed for code generation (mako scripts, grammar, etc.)
 EXTRA_FILES=(
     VERSION
     meson.build
@@ -34,7 +28,7 @@ EXTRA_FILES=(
 
 # resolve which tag to use
 if [ -z "$MESA_TAG" ]; then
-    echo "finding latest Mesa release tag..."
+    echo "finding latest mesa release tag..."
     MESA_TAG=$(git ls-remote --tags --refs --sort=-v:refname "$MESA_URL" \
         | grep -o 'refs/tags/mesa-[0-9]*\.[0-9]*\.[0-9]*$' \
         | head -1 \
@@ -46,7 +40,7 @@ fi
 TMPDIR="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR"' EXIT
 
-echo "cloning Mesa $MESA_TAG (shallow, sparse)..."
+echo "cloning mesa $MESA_TAG (shallow, sparse)..."
 git init "$TMPDIR/mesa-src"
 git -C "$TMPDIR/mesa-src" remote add origin "$MESA_URL"
 git -C "$TMPDIR/mesa-src" fetch --depth 1 --filter=blob:none origin tag "$MESA_TAG" 2>&1
@@ -77,6 +71,6 @@ find "$REPO_MESA" -type l ! -exec test -e {} \; -print0 | xargs -0 rm
 # store the tag for reference
 echo "$MESA_TAG" > "$REPO_MESA/.vendored-version"
 
-echo "done. vendored Mesa $MESA_TAG into $REPO_MESA/"
+echo "done. vendored mesa $MESA_TAG into $REPO_MESA/"
 echo "files: $(find "$REPO_MESA" -type f | wc -l | tr -d ' ')"
 echo "size: $(du -sh "$REPO_MESA" | cut -f1)"
