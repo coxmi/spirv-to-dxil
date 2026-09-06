@@ -1,7 +1,7 @@
 .{
-    .name = .dxc_bin,
-    .version = "0.0.0",
-    .fingerprint = 0x1d7ea9b2c5b9dc04,
+    .name = .spirv_to_dxil,
+    .version = "0.0.1",
+    .fingerprint = 0xf05d42582142d1a,
     .minimum_zig_version = "0.17.0-dev.1963+e00c6c439",
     .dependencies = .{},
     .paths = .{
