@@ -66,6 +66,13 @@ done
 # prune symlinks whose targets are outside the sparse vendored set
 find "$REPO_MESA" -type l ! -exec test -e {} \; -print0 | xargs -0 rm
 
+# apply local patches
+for patch in "$REPO_ROOT"/patches/*.patch; do
+    [ -f "$patch" ] || continue
+    echo "applying $(basename "$patch")..."
+    patch -p1 -d "$REPO_MESA" < "$patch"
+done
+
 # store the tag for reference
 echo "$MESA_TAG" > "$REPO_MESA/.vendored-version"
 

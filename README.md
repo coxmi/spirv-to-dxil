@@ -1,11 +1,11 @@
 # spirv\_to\_dxil
 
-SPIR-V to DXIL converter built from [mesa](https://gitlab.freedesktop.org/mesa/mesa) source, packaged for use in zig.
+SPIR-V to DXIL converter built from [mesa](https://gitlab.freedesktop.org/mesa/mesa) source, packaged for use in zig as an individual component.
 
 
 ## Use pre-built libraries
 
-Download the tarball for your target from [releases](https://github.com/coxmi/spirv_to_dxil/releases).
+Download the tarball for your target from [releases](https://github.com/coxmi/spirv-to-dxil/releases).
 Each tarball contains:
 
 ```sh
@@ -23,7 +23,7 @@ lib/libspirv_to_dxil.a
 Fetch the package and give the bindings module to your build:
 
 ```sh
-zig fetch --save git+https://github.com/coxmi/spirv_to_dxil.git
+zig fetch --save git+https://github.com/coxmi/spirv-to-dxil.git
 ```
 
 ```zig
@@ -65,7 +65,7 @@ uv pip install mako pyyaml
 source .venv/bin/activate
 
 # grab mesa source (uses latest tag by default)
-# use `./mesa-vendor mesa-25.1.0` for a specific tag
+# use e.g. `./mesa-vendor mesa-26.2.2` for a specific mesa version
 ./mesa-vendor
 
 # regenerate required files

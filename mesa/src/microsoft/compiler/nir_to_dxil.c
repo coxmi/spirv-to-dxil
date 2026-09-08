@@ -1303,7 +1303,7 @@ emit_srv(struct ntd_context *ctx, nir_variable *var, unsigned count)
    }
    const struct dxil_type *res_type_as_type = dxil_module_get_res_type(&ctx->mod, res_kind, comp_type, 4, false /* readwrite */);
 
-   if (glsl_type_is_array(var->type))
+   if (glsl_type_is_array(var->type) && count > 0)
       res_type_as_type = dxil_module_get_array_type(&ctx->mod, res_type_as_type, count);
 
    const struct dxil_mdnode *srv_meta = emit_srv_metadata(&ctx->mod, res_type_as_type, var->name,
@@ -1598,7 +1598,7 @@ emit_sampler(struct ntd_context *ctx, nir_variable *var, unsigned count)
    const struct dxil_type *int32_type = dxil_module_get_int_type(&ctx->mod, 32);
    const struct dxil_type *sampler_type = dxil_module_get_struct_type(&ctx->mod, "struct.SamplerState", &int32_type, 1);
 
-   if (glsl_type_is_array(var->type))
+   if (glsl_type_is_array(var->type) && count > 0)
       sampler_type = dxil_module_get_array_type(&ctx->mod, sampler_type, count);
 
    const struct dxil_mdnode *sampler_meta = emit_sampler_metadata(&ctx->mod, sampler_type, var, &layout);
@@ -6032,7 +6032,9 @@ emit_module(struct ntd_context *ctx, const struct nir_to_dxil_options *opts)
    nir_foreach_variable_with_modes(var, ctx->shader, nir_var_uniform) {
       unsigned count = glsl_type_get_sampler_count(var->type);
       assert(count == 0 || glsl_type_is_bare_sampler(glsl_without_array(var->type)));
-      if (count > 0 && !emit_sampler(ctx, var, count))
+      if ((count > 0 ||
+          (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
+           glsl_type_is_unsized_array(var->type))) && !emit_sampler(ctx, var, count))
          return false;
    }
 
@@ -6040,7 +6042,9 @@ emit_module(struct ntd_context *ctx, const struct nir_to_dxil_options *opts)
    nir_foreach_variable_with_modes(var, ctx->shader, nir_var_uniform) {
       unsigned count = glsl_type_get_texture_count(var->type);
       assert(count == 0 || glsl_type_is_texture(glsl_without_array(var->type)));
-      if (count > 0 && !emit_srv(ctx, var, count))
+      if ((count > 0 ||
+          (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
+           glsl_type_is_unsized_array(var->type))) && !emit_srv(ctx, var, count))
          return false;
    }
 
