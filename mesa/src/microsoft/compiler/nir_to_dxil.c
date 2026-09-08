@@ -6034,7 +6034,8 @@ emit_module(struct ntd_context *ctx, const struct nir_to_dxil_options *opts)
       assert(count == 0 || glsl_type_is_bare_sampler(glsl_without_array(var->type)));
       if ((count > 0 ||
           (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
-           glsl_type_is_unsized_array(var->type))) && !emit_sampler(ctx, var, count))
+           glsl_type_is_unsized_array(var->type) &&
+           glsl_type_is_bare_sampler(glsl_without_array(var->type)))) && !emit_sampler(ctx, var, count))
          return false;
    }
 
@@ -6044,7 +6045,8 @@ emit_module(struct ntd_context *ctx, const struct nir_to_dxil_options *opts)
       assert(count == 0 || glsl_type_is_texture(glsl_without_array(var->type)));
       if ((count > 0 ||
           (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
-           glsl_type_is_unsized_array(var->type))) && !emit_srv(ctx, var, count))
+           glsl_type_is_unsized_array(var->type) &&
+           glsl_type_is_texture(glsl_without_array(var->type)))) && !emit_srv(ctx, var, count))
          return false;
    }
 

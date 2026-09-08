@@ -205,25 +205,28 @@ test "converts spv fixtures to dxil" {
     };
 
     const fixtures = [_]Fixture{
-        .{ .path = "src/spv/array_textures.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/compute.comp.spv", .stage = .compute },
-        .{ .path = "src/spv/image_atomic.comp.spv", .stage = .compute },
-        .{ .path = "src/spv/multiple_render_targets.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/multisampled_combined.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/multisampled.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/phong.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/push_constants.vert.spv", .stage = .vertex },
-        .{ .path = "src/spv/samplerless.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/storage_image.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/array_textures.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/bindless_runtime.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/bindless_runtime.comp.spv", .stage = .compute },
+        .{ .path = "src/shaders/bindless_bounded.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/compute.comp.spv", .stage = .compute },
+        .{ .path = "src/shaders/image_atomic.comp.spv", .stage = .compute },
+        .{ .path = "src/shaders/multiple_render_targets.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/multisampled_combined.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/multisampled.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/phong.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/push_constants.vert.spv", .stage = .vertex },
+        .{ .path = "src/shaders/samplerless.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/storage_image.frag.spv", .stage = .fragment },
         // tessellation_control.tesc.spv excluded: mesa 26.2.2 can't compile a
         // standalone TCS (primitive mode only set from a linked domain shader, so
         // _primitive_mode stays UNSPECIFIED and dxil_nir_fixup_tess_level_for_domain
         // frees gl_TessLevelInner wrongly -> crash). the .tesc.spv is valid.
-        .{ .path = "src/spv/tessellation_evaluation.tese.spv", .stage = .tess_eval },
-        .{ .path = "src/spv/texture_displace.vert.spv", .stage = .vertex },
-        .{ .path = "src/spv/texture_gather.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/triangle.frag.spv", .stage = .fragment },
-        .{ .path = "src/spv/triangle.vert.spv", .stage = .vertex },
+        .{ .path = "src/shaders/tessellation_evaluation.tese.spv", .stage = .tess_eval },
+        .{ .path = "src/shaders/texture_displace.vert.spv", .stage = .vertex },
+        .{ .path = "src/shaders/texture_gather.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/triangle.frag.spv", .stage = .fragment },
+        .{ .path = "src/shaders/triangle.vert.spv", .stage = .vertex },
     };
     
     const t = std.testing;

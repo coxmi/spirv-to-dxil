@@ -18,25 +18,26 @@
        sampler_type = dxil_module_get_array_type(&ctx->mod, sampler_type, count);
  
     const struct dxil_mdnode *sampler_meta = emit_sampler_metadata(&ctx->mod, sampler_type, var, &layout);
-@@ -6032,7 +6032,9 @@
+@@ -6032,7 +6032,10 @@
     nir_foreach_variable_with_modes(var, ctx->shader, nir_var_uniform) {
        unsigned count = glsl_type_get_sampler_count(var->type);
        assert(count == 0 || glsl_type_is_bare_sampler(glsl_without_array(var->type)));
 -      if (count > 0 && !emit_sampler(ctx, var, count))
 +      if ((count > 0 ||
 +          (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
-+           glsl_type_is_unsized_array(var->type))) && !emit_sampler(ctx, var, count))
++           glsl_type_is_unsized_array(var->type) &&
++           glsl_type_is_bare_sampler(glsl_without_array(var->type)))) && !emit_sampler(ctx, var, count))
           return false;
     }
  
-@@ -6040,7 +6042,9 @@
+@@ -6042,7 +6045,10 @@
     nir_foreach_variable_with_modes(var, ctx->shader, nir_var_uniform) {
        unsigned count = glsl_type_get_texture_count(var->type);
        assert(count == 0 || glsl_type_is_texture(glsl_without_array(var->type)));
 -      if (count > 0 && !emit_srv(ctx, var, count))
 +      if ((count > 0 ||
 +          (ctx->opts->environment == DXIL_ENVIRONMENT_VULKAN &&
-+           glsl_type_is_unsized_array(var->type))) && !emit_srv(ctx, var, count))
++           glsl_type_is_unsized_array(var->type) &&
++           glsl_type_is_texture(glsl_without_array(var->type)))) && !emit_srv(ctx, var, count))
           return false;
     }
- 

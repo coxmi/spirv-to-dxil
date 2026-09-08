@@ -59,23 +59,21 @@ The mesa source is vendored in `mesa/` and generated files live in `mesa_generat
 To update manually:
 
 ```bash
-# install dependencies
+# use uv/venv for installing dependencies
 uv venv
 uv pip install mako pyyaml
-source .venv/bin/activate
 
 # grab mesa source (uses latest tag by default)
 # use e.g. `./mesa-vendor mesa-26.2.2` for a specific mesa version
 ./mesa-vendor
 
 # regenerate required files
+source .venv/bin/activate
 ./mesa-generate
+deactivate
 
 # build
 zig build -Doptimize=ReleaseFast
-
-# exit venv shell
-deactivate
 ```
 
 ## License
