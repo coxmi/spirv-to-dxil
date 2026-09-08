@@ -1,6 +1,6 @@
 .{
     .name = .spirv_to_dxil,
-    .version = "0.0.1",
+    .version = "0.0.2",
     .fingerprint = 0xbfc1c49d3ee86431,
     .minimum_zig_version = "0.17.0-dev.1963+e00c6c439",
     .dependencies = .{},
